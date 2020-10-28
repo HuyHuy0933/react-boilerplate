@@ -4,7 +4,9 @@ import { RootState } from 'types';
 import { initialState } from './slice';
 
 // First select the relevant part from the state
-const selectDomain = (state: RootState) => state.githubRepoForm || initialState;
+const selectDomain = (state: RootState) => {
+  return state.githubRepoForm || initialState;
+}
 
 export const selectUsername = createSelector(
   [selectDomain],
@@ -13,7 +15,10 @@ export const selectUsername = createSelector(
 
 export const selectLoading = createSelector(
   [selectDomain],
-  githubRepoFormState => githubRepoFormState.loading,
+  githubRepoFormState => {
+    console.log('huy')
+    return githubRepoFormState.loading
+  },
 );
 
 export const selectError = createSelector(

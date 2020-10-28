@@ -10,7 +10,8 @@ interface Props {
   url: string;
 }
 
-export function RepoItem({ name, starCount, url }: Props) {
+export const RepoItem = React.memo(({ name, starCount, url }: Props) => {
+  //console.log('huy');
   return (
     <Wrapper>
       <Name>{name}</Name>
@@ -25,7 +26,7 @@ export function RepoItem({ name, starCount, url }: Props) {
       </Info>
     </Wrapper>
   );
-}
+});
 
 const Wrapper = styled.div`
   display: flex;

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import { useSelector, useDispatch } from 'react-redux';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
@@ -24,7 +24,10 @@ export function GithubRepoForm() {
   const username = useSelector(selectUsername);
   const repos = useSelector(selectRepos);
   const isLoading = useSelector(selectLoading);
+  console.log(isLoading);
   const error = useSelector(selectError);
+
+  const [count, setCount] = useState(0);
 
   const dispatch = useDispatch();
 
@@ -78,6 +81,9 @@ export function GithubRepoForm() {
       ) : error ? (
         <ErrorText>{repoErrorText(error)}</ErrorText>
       ) : null}
+
+      {count}
+      <button onClick={() => setCount(count + 1)}>Click</button>
     </Wrapper>
   );
 }

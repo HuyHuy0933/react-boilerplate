@@ -21,6 +21,7 @@ import { ReactComponent as CodeAnalysisIcon } from './assets/code-analysis.svg';
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/i18n';
 import { Link } from 'app/components/Link';
+import { PostsList } from '../Huyxle/Posts';
 
 export function Features() {
   const { t } = useTranslation();

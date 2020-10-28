@@ -14,6 +14,8 @@ import { GlobalStyle } from '../styles/global-styles';
 
 import { HomePage } from './containers/HomePage/Loadable';
 import { NotFoundPage } from './containers/NotFoundPage/Loadable';
+import { PostsList } from './containers/Huyxle/Posts';
+import { GithubRepoForm } from './containers/GithubRepoForm';
 
 export function App() {
   return (
@@ -26,7 +28,9 @@ export function App() {
       </Helmet>
 
       <Switch>
-        <Route exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
+        <Route exact path="/" component={HomePage} />
+        <Route path="/posts" component={PostsList} />
+        <Route path="/temp" component={GithubRepoForm} />
         <Route component={NotFoundPage} />
       </Switch>
       <GlobalStyle />
