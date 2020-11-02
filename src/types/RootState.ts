@@ -1,6 +1,7 @@
 import { GithubRepoFormState } from 'app/containers/GithubRepoForm/types';
 import { ThemeState } from 'styles/theme/types';
 import { PostState } from 'app/containers/Huyxle/Posts/types';
+import { GithubUsersState } from 'app/containers/Huyxle/GithubUsers/slice';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
 
 /* 
@@ -13,5 +14,6 @@ export interface RootState {
   theme?: ThemeState;
   githubRepoForm?: GithubRepoFormState;
   post?: PostState;
+  githubUsers: GithubUsersState
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }

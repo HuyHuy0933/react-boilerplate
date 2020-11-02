@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components/macro';
 import { useSelector, useDispatch } from 'react-redux';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
@@ -7,6 +7,7 @@ import { Input } from './components/Input';
 import { RepoItem } from './RepoItem';
 import { TextButton } from './components/TextButton';
 import { sliceKey, reducer, actions } from './slice';
+import { actions as githubUsersActions } from '../Huyxle/GithubUsers/slice';
 import { githubRepoFormSaga } from './saga';
 import {
   selectUsername,
@@ -16,6 +17,7 @@ import {
 } from './selectors';
 import { LoadingIndicator } from 'app/components/LoadingIndicator';
 import { RepoErrorType } from './types';
+import { selectGithubUsers } from '../Huyxle/GithubUsers/selectors';
 
 export function GithubRepoForm() {
   useInjectReducer({ key: sliceKey, reducer: reducer });
@@ -24,16 +26,16 @@ export function GithubRepoForm() {
   const username = useSelector(selectUsername);
   const repos = useSelector(selectRepos);
   const isLoading = useSelector(selectLoading);
-  console.log(isLoading);
   const error = useSelector(selectError);
 
-  const [count, setCount] = useState(0);
+  //const [githubUsers, setGithubUsers] = useState([username]);
+  //const githubUsers = useSelector(selectGithubUsers);
 
   const dispatch = useDispatch();
 
   const onChangeUsername = (evt: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(actions.changeUsername(evt.currentTarget.value));
-    dispatch(actions.loadRepos());
+    //dispatch(actions.loadRepos());
   };
 
   const useEffectOnMount = (effect: React.EffectCallback) => {
@@ -43,6 +45,7 @@ export function GithubRepoForm() {
     // When initial state username is not null, submit the form to load repos
     if (username && username.trim().length > 0) {
       dispatch(actions.loadRepos());
+      dispatch(githubUsersActions.addGithubUser(username));
     }
   });
 
@@ -51,7 +54,28 @@ export function GithubRepoForm() {
     if (evt !== undefined && evt.preventDefault) {
       evt.preventDefault();
     }
+
+    dispatch(actions.loadRepos());
   };
+
+  const addGithubUser = () => {
+    dispatch(githubUsersActions.addGithubUser(username));
+  };
+
+  const renderedRepos = useMemo(
+    () =>
+      repos.map(repo => {
+        return (
+          <RepoItem
+            key={repo.id}
+            name={repo.name}
+            starCount={repo.stargazers_count}
+            url={repo.html_url}
+          />
+        );
+      }),
+    [repos],
+  );
 
   return (
     <Wrapper>
@@ -64,26 +88,33 @@ export function GithubRepoForm() {
             value={username}
             onChange={onChangeUsername}
           />
-          {isLoading && <LoadingIndicator small />}
+
+          <StyledDefaultButton type="submit" disabled={isLoading}>
+            {isLoading ? <LoadingIndicator small /> : 'Load Repos'}
+          </StyledDefaultButton>
+
+          <StyledCustomeButton
+            type="button"
+            onClick={addGithubUser}
+            disabled={isLoading}
+          >
+            {isLoading ? <LoadingIndicator small /> : 'Add User'}
+          </StyledCustomeButton>
         </InputWrapper>
+
+        {/* <StyledDefaultButton
+          type="button"
+          onClick={addGithubUser}
+          disabled={isLoading}
+        >
+          {isLoading ? <LoadingIndicator small /> : 'Add User'}
+        </StyledDefaultButton> */}
       </FormGroup>
       {repos?.length > 0 ? (
-        <List>
-          {repos.map(repo => (
-            <RepoItem
-              key={repo.id}
-              name={repo.name}
-              starCount={repo.stargazers_count}
-              url={repo.html_url}
-            />
-          ))}
-        </List>
+        <List>{renderedRepos}</List>
       ) : error ? (
         <ErrorText>{repoErrorText(error)}</ErrorText>
       ) : null}
-
-      {count}
-      <button onClick={() => setCount(count + 1)}>Click</button>
     </Wrapper>
   );
 }
@@ -103,6 +134,26 @@ export const repoErrorText = (error: RepoErrorType) => {
   }
 };
 
+const StyledDefaultButton = styled.button`
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 1em;
+  margin: 0.25em;
+  padding: 0.25em 1em;
+  border: 2px solid rgba(0, 0, 0, 0.7);
+  border-radius: 3px;
+  background-color: unset;
+  width: 150px;
+
+  :hover {
+    cursor: pointer;
+  }
+`;
+
+const StyledCustomeButton = styled(StyledDefaultButton)`
+  color: rgba(215, 113, 88, 1);
+  border-color: rgba(215, 113, 88, 1);
+`;
+
 const Wrapper = styled.div`
   ${TextButton} {
     margin: 16px 0;
@@ -117,6 +168,11 @@ const InputWrapper = styled.div`
   ${Input} {
     width: ${100 / 3}%;
     margin-right: 0.5rem;
+  }
+
+  ${StyledDefaultButton} {
+    color: rgba(215, 113, 88, 1);
+    border-color: rgba(215, 113, 88, 1);
   }
 `;
 

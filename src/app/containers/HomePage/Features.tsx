@@ -22,6 +22,7 @@ import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/i18n';
 import { Link } from 'app/components/Link';
 import { PostsList } from '../Huyxle/Posts';
+import { GithubUsers } from '../Huyxle/GithubUsers';
 
 export function Features() {
   const { t } = useTranslation();
@@ -40,29 +41,7 @@ export function Features() {
           <StateIcon className="feature-icon" />
           <Content>
             <SubTitle>Predictable State</SubTitle>
-            <P>
-              Build easy to test and debug, flexible and extensible applications
-              using{' '}
-              <A
-                href="https://redux.js.org/basics/usage-with-react"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Redux
-              </A>
-              . Unidirectional data flow allows for change logging and time
-              travel debugging.{' '}
-              <A
-                href="https://github.com/zalmoxisus/redux-devtools-extension"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Install Chrome Redux Dev Tools
-              </A>{' '}
-              to see how your application's state changes and travel in time to
-              debug. Type any github username below and see it in action with
-              Redux Dev Tools.
-            </P>
+            <GithubUsers />
             <GithubRepoForm />
           </Content>
         </Feature>

@@ -16,7 +16,7 @@ export const selectUsername = createSelector(
 export const selectLoading = createSelector(
   [selectDomain],
   githubRepoFormState => {
-    console.log('huy')
+    //console.log('huy')
     return githubRepoFormState.loading
   },
 );
